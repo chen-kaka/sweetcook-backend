@@ -1,0 +1,17 @@
+{
+  "mongodb": {
+    "uri": "mongodb://sweetcookapp:sweetcook2983@123.207.1.214:27017/sweetcook"
+  },
+
+  "session": {
+    "useRedis": 0,
+    "redisHostPort": "10.2.124.15:6379",
+    "redisSessionName": "gf-sweetcook-backend"
+  },
+
+  "log": {
+    "level": "debug",
+    "out": "stdout",
+    "fileDir": "logs"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "mongodb": {
+    "uri": "mongodb://indexUser:indexconfig@10.2.124.15:27017/index-config"
+  },
+
+  "session": {
+    "useRedis": 0,
+    "redisHostPort": "10.2.124.15:6379",
+    "redisSessionName": "gf-sweetcook-backend"
+  },
+
+  "log": {
+    "level": "debug",
+    "out": "stdout",
+    "fileDir": "logs"
+  }
+}
