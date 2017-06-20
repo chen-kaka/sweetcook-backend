@@ -44,8 +44,8 @@ func main() {
 	v1 := r.Group("/app-api")
 	{
 		userInfo := new(controllers.User)
-		v1.GET("user/info", userInfo.Info)
-		v1.POST("user/set", userInfo.Setting)
+		v1.GET("/user/info", userInfo.Info)
+		v1.POST("/user/register", userInfo.Register)
 	}
 
 	r.Static("/public", "./public")

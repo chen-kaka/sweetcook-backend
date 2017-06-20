@@ -36,12 +36,12 @@ func (u User)Info(c *gin.Context)  {
 /*
 设置数据
 
-http://localhost:7000/app-api/user/set
+http://localhost:7000/app-api/user/register
 
 {"username":"kaka","telephone":"1234567890","nickname":"kakachan","password":"123456","sex":1}
  */
 
-func (u User)Setting(c *gin.Context)  {
+func (u User)Register(c *gin.Context)  {
 	var userInfo services.UserInfo
 	if err := c.BindJSON(&userInfo); err != nil {
 		logger.Error(err)

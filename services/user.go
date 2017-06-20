@@ -20,7 +20,7 @@ type (
 		Password      string        `json:"password" bson:"password" binding:"required"`
 		Telephone     string    `json:"telephone" bson:"telephone"`
 		Sex           int    `json:"sex" bson:"sex" binding:"required"` // 0: male 1: female
-		Companion    bson.ObjectId         `json:"companion_id" bson:"companion_id"`
+		Companion    string     `json:"companion_id" bson:"companion_id"`
 		CreatedAt int64         `json:"created_at" bson:"created_at"`
 		UpdatedAt int64         `json:"updated_at" bson:"updated_at"`
 	}
@@ -29,8 +29,10 @@ type (
 func Create(c *gin.Context, userInfo UserInfo) (ret string, err error) {
 	db := c.MustGet("db").(*mgo.Database)
 	
+	userInfo.Id = bson.NewObjectId()
 	userInfo.CreatedAt = time.Now().UnixNano() / int64(time.Millisecond)
 	
+	logger.Debug("insert userInfo: ", userInfo)
 	err = db.C(CollectionUser).Insert(userInfo)
 	if err != nil {
 		logger.Error(err)
@@ -52,12 +54,7 @@ func QueryOne(c *gin.Context, username string) (userInfo UserInfo, err error) {
 // Update an userConfig
 func CreateOrUpdate(c *gin.Context, userInfo UserInfo) (ret interface{}, err error) {
 	db := c.MustGet("db").(*mgo.Database)
-	
-	if userInfo.Id == "" {
-		userInfo.Id = bson.NewObjectId()
-	}
-	logger.Debug("id: ", userInfo.Id)
-	
+
 	existedUserInfo := UserInfo{}
 	query := bson.M{"username": userInfo.Username}
 	db.C(CollectionUser).Find(query).One(&existedUserInfo)
