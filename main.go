@@ -29,10 +29,12 @@ func main() {
 	if useRedis == 1 {
 		redisHostPort,_ := utils.GetStringFromInterfaceMap(sessionInfo, "redisHostPort")
 		redisSessionName,_ := utils.GetStringFromInterfaceMap(sessionInfo, "redisSessionName")
-		logger.Info("using redis session， host: ", redisHostPort, ", session name: ", redisSessionName)
+		redisRequirePass,_ := utils.GetStringFromInterfaceMap(sessionInfo, "redisRequirePass")
+		logger.Info("using redis session， host: ", redisHostPort, ", session name: ", redisSessionName, ", redisRequirePass: ", redisRequirePass)
 		//session
-		store, _ := sessions.NewRedisStore(10, "tcp", redisHostPort, "", []byte("secret"))
-		r.Use(sessions.Sessions(redisSessionName, store))
+		store, _ := sessions.NewRedisStore(10, "tcp", redisHostPort, redisRequirePass, []byte("secret"))
+		//store := sessions.NewCookieStore([]byte("secret"))
+		r.Use(sessions.Sessions("mysession", store))
 
 	} else {
 		logger.Info("redis session not activate.")
@@ -46,6 +48,9 @@ func main() {
 		userInfo := new(controllers.User)
 		v1.GET("/user/info", userInfo.Info)
 		v1.POST("/user/register", userInfo.Register)
+		v1.POST("/user/login", userInfo.Login)
+		v1.GET("/user/logout", userInfo.Logout)
+		v1.GET("/user/bind", userInfo.Bind)
 	}
 
 	r.Static("/public", "./public")

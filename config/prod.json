@@ -4,9 +4,10 @@
   },
 
   "session": {
-    "useRedis": 0,
-    "redisHostPort": "10.2.124.15:6379",
-    "redisSessionName": "gf-sweetcook-backend"
+    "useRedis": 1,
+    "redisHostPort": "123.207.1.214:6379",
+    "redisSessionName": "gf-sweetcook-backend",
+    "redisRequirePass": "kakaxysweetcooksession"
   },
 
   "log": {

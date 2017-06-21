@@ -21,8 +21,14 @@ type (
 		Telephone     string    `json:"telephone" bson:"telephone"`
 		Sex           int    `json:"sex" bson:"sex" binding:"required"` // 0: male 1: female
 		Companion    string     `json:"companion_id" bson:"companion_id"`
+		BindTime     string     `json:"bind_time" bson:"bind_time"`
 		CreatedAt int64         `json:"created_at" bson:"created_at"`
 		UpdatedAt int64         `json:"updated_at" bson:"updated_at"`
+	}
+	
+	LoginInfo struct {
+		Username     string   `json:"username" bson:"username" binding:"required"`
+		Password      string        `json:"password" bson:"password" binding:"required"`
 	}
 )
 
@@ -72,5 +78,21 @@ func CreateOrUpdate(c *gin.Context, userInfo UserInfo) (ret interface{}, err err
 		return
 	}
 	ret = "update succ"
+	return
+}
+
+func BindUser(c *gin.Context, user UserInfo, bindUser UserInfo) (retMsg string, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"username": user.Username}
+	user.Companion = bindUser.Username
+	user.BindTime = time.Now().String()
+	err = db.C(CollectionUser).Update(query, user)
+	
+	//更新情侣
+	query = bson.M{"username": bindUser.Username}
+	bindUser.Companion = user.Username
+	bindUser.BindTime = time.Now().String()
+	err = db.C(CollectionUser).Update(query, bindUser)
+	retMsg = "绑定成功"
 	return
 }
