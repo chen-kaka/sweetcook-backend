@@ -4,8 +4,8 @@ ver=`date +%Y%m%d%H%M`
 projDir=sweetcook-backend
 projName=sweetcook-backend-t
 
-cd /home/gf/go/src/$projDir
-docker build -t docker.gf.com.cn/$projName:$ver .
+cd /xy/src/go/src/$projDir
+docker build -t docker.com.cn/$projName:$ver .
 containerId=`docker ps | grep $projName: | awk '{print $1}'`
 imageId=`docker ps | grep $projName: | awk '{print $2}'`
 echo "containerId is $containerId"
@@ -17,8 +17,8 @@ fi
 if [ -n "$imageId" ]; then
   docker rmi $imageId
 fi
-docker run -d -p 9540:7000 \
+docker run -d -p 9100:7000 \
   --restart=always \
   -e CONFIG_RUNMODE=test \
-  -v /home/gf/go/src/$projDir/logs:/gopath/bin/logs \
-  --name=$projName-$ver docker.gf.com.cn/$projName:$ver
+  -v /xy/src/go/src/$projDir/logs:/gopath/bin/logs \
+  --name=$projName-$ver docker.com.cn/$projName:$ver

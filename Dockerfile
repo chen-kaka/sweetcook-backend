@@ -1,4 +1,4 @@
-FROM docker.gf.com.cn/golang:1.8.1
+FROM golang:latest
 
 ENV GOPATH /gopath
 

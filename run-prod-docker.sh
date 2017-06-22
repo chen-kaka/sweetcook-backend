@@ -11,9 +11,9 @@ if [ -n "$imageId" ]; then
   docker rmi $imageId -f
 fi
 
-docker build -t docker.gf.com.cn/$projName:$ver .
+docker build -t docker.com.cn/$projName:$ver .
 
-dockerPushImage=docker.gf.com.cn/$projName:$ver
+dockerPushImage=docker.com.cn/$projName:$ver
 docker push $dockerPushImage
 echo "docker image pushed, update docker using:"
 echo $dockerPushImage

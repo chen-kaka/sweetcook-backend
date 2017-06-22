@@ -1,6 +1,6 @@
 {
   "mongodb": {
-    "uri": "mongodb://indexUser:indexconfig@10.2.124.15:27017/index-config"
+    "uri": "mongodb://sweetcookapp:sweetcook2983@123.207.1.214:27017/sweetcook"
   },
 
   "session": {

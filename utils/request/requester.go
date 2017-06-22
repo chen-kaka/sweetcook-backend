@@ -9,7 +9,6 @@ import (
 	"bytes"
 )
 
-
 func HttpGetJson(reqUrl string) ( retJson map[string]interface{}, err error ) {
 	body,err := HttpGet(reqUrl)
 	err = json.Unmarshal(body, &retJson)
