@@ -1,6 +1,11 @@
 package services
 
-import "gopkg.in/mgo.v2/bson"
+import (
+	"gopkg.in/mgo.v2/bson"
+	"github.com/gin-gonic/gin"
+	"gopkg.in/mgo.v2"
+	"sweetcook-backend/utils/logger"
+)
 
 const (
 	CollectionCookbook = "cookbook"
@@ -38,3 +43,11 @@ type (
 		UpdatedAt int64         `json:"updated_at" bson:"updated_at"`
 	}
 )
+
+func QueryCookbookList(c *gin.Context, page int, num int) (cookbookList []JuheCookbook, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{}
+	logger.Debug("query: ", query, "page: ", page, "num: ", num)
+	err = db.C(CollectionJuheCookbook).Find(query).Sort("id").Skip(page * num).Limit(num).All(&cookbookList)
+	return
+}

@@ -51,6 +51,9 @@ func main() {
 		v1.POST("/user/login", userInfo.Login)
 		v1.GET("/user/logout", userInfo.Logout)
 		v1.GET("/user/bind", userInfo.Bind)
+		
+		cookbook := new(controllers.Cookbook)
+		v1.GET("/cookbook/list", cookbook.List)
 	}
 
 	r.Static("/public", "./public")

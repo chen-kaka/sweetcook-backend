@@ -2,7 +2,6 @@ package services
 
 import (
 	//"sweetcook-backend/utils/request"
-	"fmt"
 	"sweetcook-backend/utils/logger"
 	"sweetcook-backend/utils/mongodb"
 	"gopkg.in/mgo.v2/bson"
@@ -13,7 +12,7 @@ import (
 )
 
 func init()  {
-	fmt.Println("run result: ", RunJuheCookData())
+	//fmt.Println("run result: ", RunJuheCookData())
 }
 
 const juheUrlTemplate = "http://apis.juhe.cn/cook/index?key=da3e5f2014978b8617b4d0c1f8c169ce&cid=cidfield&rn=rnfiled&pn=pnfield"
@@ -58,6 +57,7 @@ func RunJuheCookData() (succ bool) {
 				cookBook.Ingredients = convertInterface(dataItemMap["ingredients"])
 				cookBook.Burden = convertInterface(dataItemMap["burden"])
 				cookBook.Title = convertInterface(dataItemMap["title"])
+				cookBook.Imtro = convertInterface(dataItemMap["imtro"])
 				cookBook.Mid = convertInterface(dataItemMap["id"])
 				
 				stepsInterface := dataItemMap["steps"]
