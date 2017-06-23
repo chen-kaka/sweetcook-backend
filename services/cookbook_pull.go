@@ -1,26 +1,36 @@
 package services
 
 import (
-	"sweetcook-backend/utils/request"
+	//"sweetcook-backend/utils/request"
 	"fmt"
 	"sweetcook-backend/utils/logger"
 	"reflect"
 	"io/ioutil"
 	"encoding/json"
+	"sweetcook-backend/utils/mongodb"
+	"gopkg.in/mgo.v2/bson"
+	"strings"
+	"strconv"
+	"sweetcook-backend/utils/request"
 )
 
-const urlTemplate = "http://dy.api.duominuo.com/pdc?partnerId=ea86732b8e86388470ec8392ba949baa&token=9dcbc541377b8eb16f609df26c8d02a2&apiId=23&name=%E6%8E%92%E9%AA%A8&fields=&rn=%s&pn=%s"
+func init()  {
+	//fmt.Println("run result: ", RunCookData())
+}
+
+const urlTemplate = "http://dy.api.duominuo.com/pdc?partnerId=ea86732b8e86388470ec8392ba949baa&token=9dcbc541377b8eb16f609df26c8d02a2&apiId=23&name=%E6%8E%92%E9%AA%A8&fields=&rn=rnfiled&pn=pnfield"
 
 func RunCookData() (succ bool) {
-	pn,rn := 0, 1000
+	db := mongodb.ConnectMongo()
+	pn,rn := 0, 500
 	
-	reqUrl := fmt.Sprint(urlTemplate, rn, pn)
-	
-	for (pn+1) * rn < 16975 {
-		pn += 1
+	totalCount := 0
+	insertCount := 0
+	for pn < 1 {
 	//for (pn+1) * rn < 16975 {
-		
+		reqUrl := generateReqUrl(urlTemplate, rn, pn)
 		retJson, err := request.HttpGetJson(reqUrl)
+		//retJson, err := FakeHttpGetJson(reqUrl)
 		if err != nil {
 			logger.Error("err: ", err)
 			succ = false
@@ -45,10 +55,31 @@ func RunCookData() (succ bool) {
 			cookBook.Picture = convertInterface(dataItemMap["picture"])
 			cookBook.Tips = convertInterface(dataItemMap["tips"])
 			cookBook.Title = convertInterface(dataItemMap["title"])
-			logger.Debug("cookBook: ", cookBook)
+			cookBook.Mid = convertInterface(dataItemMap["mid"])
+			
+			query := bson.M{"mid": cookBook.Mid}
+			existedCookBook := Cookbook{}
+			db.C(CollectionCookbook).Find(query).One(&existedCookBook)
+			if existedCookBook.Mid == "" {
+				//insert
+				db.C(CollectionCookbook).Insert(cookBook)
+				insertCount += 1
+				logger.Debug("cookBook inserted : ", cookBook.Title)
+			}else {
+				logger.Debug("data existed. mid: ",existedCookBook.Mid, ", title: ", existedCookBook.Title, ", new title:", cookBook.Title)
+			}
+			totalCount += 1
 		}
+		pn += 1
 	}
-	
+	logger.Debug("total insert count is: ", insertCount, ", and total count: ", totalCount)
+	succ = true
+	return
+}
+
+func generateReqUrl(url string, rn int, pn int) (reqUrl string) {
+	reqUrl = strings.Replace(url, "rnfiled", strconv.Itoa(rn), -1)
+	reqUrl = strings.Replace(reqUrl, "pnfield", strconv.Itoa(pn), -1)
 	return
 }
 
@@ -70,11 +101,13 @@ func ToSlice(arr interface{}) []interface{} {
 	return ret
 }
 
-func FakeHttpGetJson(reqUrl string) (retMap map[string]string, err error) {
-	return readFile("")
+func FakeHttpGetJson(reqUrl string) (retMap map[string]interface{}, err error) {
+	logger.Debug("requrl is: ", reqUrl)
+	retMap,err = readFile("test/testcook.txt")
+	return
 }
 
-func readFile(filename string) (retMap map[string]string, err error) {
+func readFile(filename string) (retMap map[string]interface{}, err error) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Println("ReadFile: ", err.Error())

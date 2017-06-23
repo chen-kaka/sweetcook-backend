@@ -1,0 +1,78 @@
+{
+"resultcode": "200",
+"reason": "Success",
+"result": {
+"data": [
+{
+"id": "1948",
+"title": "蒜蓉棒棒糖",
+"tags": "儿童;甜;零食;创意菜;七夕节",
+"imtro": "豆角做成的棒棒糖吃过吗？充满了童趣的造型，一定会吸引小朋友的眼球，做个营养健康的棒棒糖送给小朋友吧，真的很好吃哦，我自己吃了一个都不想停下来了。",
+"ingredients": "长豆角,200g",
+"burden": "大蒜,适量;食盐,适量;香油,适量;鸡精,适量;白醋,适量;芝麻酱,适量",
+"albums": [
+"http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/t/2/1948_423803.jpg"
+],
+"steps": [
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_e324516a19cc91c0.jpg",
+"step": "1.挑选6根长短一样的长豆角洗干净。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_ba77ae908dd607f3.jpg",
+"step": "2.放入开水中煮熟。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_9afc909d63bf9657.jpg",
+"step": "3.捞出过冷水，然后从头卷成卷。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_392d9f27db072f3d.jpg",
+"step": "4.用竹签串起来。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_61d8f33c7f61ef4c.jpg",
+"step": "5.把白醋、食盐、香油、蒜蓉、鸡精拌成料汁浇在棒棒糖上腌制入味即可。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/20/1948_0342a2f25b3b1696.jpg",
+"step": "6.喜欢的话用芝麻酱、香油、蒜蓉再调些酱汁，蘸着吃味道更棒。"
+}
+]
+},
+{
+"id": "2188",
+"title": "香辣双丝",
+"tags": "家常菜;10-20分钟;秋季;冬季;香辣;全菜系;1-2人;创意菜;双丝;锅子;其他工艺",
+"imtro": "我一直都很费解，为什么红薯不能炒？是因为它比较容易散么？应该吧，我想，薯条也没有拿红薯来炸~但是炸薯条的做法吸引了，我，我想，可能是焯过的就比较不容易散吧？O(∩_∩)O哈哈~！试试，还挺好吃的~",
+"ingredients": "土豆,2个;红薯,半个",
+"burden": "油,适量;盐,适量;干辣椒,适量",
+"albums": [
+"http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/t/3/2188_525570.jpg"
+],
+"steps": [
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/22/2188_dfcdbbf8de623016.jpg",
+"step": "1.红薯切丝，放在锅里面焯熟，放凉。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/22/2188_488fc19ba41bad5c.jpg",
+"step": "2.土豆切丝，泡在水里面去除淀粉。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/22/2188_03e375f0e31eea58.jpg",
+"step": "3.油锅里面放入葱花和辣椒，炒香。"
+},
+{
+"img": "http://juheimg.oss-cn-hangzhou.aliyuncs.com/cookbook/s/22/2188_960cc20d16ba82a4.jpg",
+"step": "4.下入土豆丝，加入盐和鸡精，还有少许的醋。翻炒，直到土豆丝变得软。下入焯好的红薯丝，就完成了！"
+}
+]
+}
+],
+"totalNum": "150",
+"pn": "0",
+"rn": "30"
+},
+"error_code": 0
+}
