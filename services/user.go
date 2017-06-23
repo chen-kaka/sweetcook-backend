@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"sweetcook-backend/utils/logger"
+	"errors"
 )
 
 const (
@@ -58,7 +59,7 @@ func QueryOne(c *gin.Context, username string) (userInfo UserInfo, err error) {
 }
 
 // Update an userConfig
-func CreateOrUpdate(c *gin.Context, userInfo UserInfo) (ret interface{}, err error) {
+func CreateOrUpdate(c *gin.Context, userInfo UserInfo, update bool) (ret interface{}, err error) {
 	db := c.MustGet("db").(*mgo.Database)
 
 	existedUserInfo := UserInfo{}
@@ -67,6 +68,12 @@ func CreateOrUpdate(c *gin.Context, userInfo UserInfo) (ret interface{}, err err
 	
 	if existedUserInfo.Username == "" {
 		return Create(c, userInfo)
+	}
+	
+	if !update {
+		err = errors.New("抱歉，用户名已被注册!")
+		//ret = "抱歉，用户名已被注册!"
+		return
 	}
 	
 	logger.Debug("update")

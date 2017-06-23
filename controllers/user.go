@@ -29,7 +29,8 @@ func (u User)Info(c *gin.Context)  {
 	userInfo,err := services.QueryOne(c, sessionUsername)
 	if err != nil {
 		logger.Error(err)
-		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_DATABASE_ERROR,error.MSG_NAME: err.Error()})
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_DATABASE_ERROR,error.MSG_NAME: err})
+		return
 	}
 	
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.DATA_NAME: userInfo})
@@ -50,10 +51,11 @@ func (u User)Register(c *gin.Context)  {
 		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_PARAM_ERROR,error.MSG_NAME: err.Error()})
 		return
 	}
-	savedUserInfo,err := services.CreateOrUpdate(c, userInfo)
+	savedUserInfo,err := services.CreateOrUpdate(c, userInfo, false)
 	if err != nil {
 		logger.Error(err)
 		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_DATABASE_ERROR,error.MSG_NAME: err.Error()})
+		return
 	}
 	
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: savedUserInfo})
