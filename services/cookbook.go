@@ -90,9 +90,23 @@ func AddCookbookList(c *gin.Context, userCookbook UserCookbook) (retMsg string, 
 	}
 	
 	logger.Debug("update")
-	userCookbook.UpdatedAt = time.Now().UnixNano() / int64(time.Millisecond)
+	ids := existedUserCookbook.Ids
+	for _,item := range userCookbook.Ids {
+		existed := false
+		for _, eItem := range ids {
+			if eItem == item {
+				existed = true
+				break
+			}
+		}
+		if !existed {
+			ids = append(ids, item)
+		}
+	}
+	existedUserCookbook.Ids = ids
+	existedUserCookbook.UpdatedAt = time.Now().UnixNano() / int64(time.Millisecond)
 	
-	err = db.C(CollectionUserCookbook).Update(query, userCookbook)
+	err = db.C(CollectionUserCookbook).Update(query, existedUserCookbook)
 	if err != nil {
 		logger.Error(err)
 		return
