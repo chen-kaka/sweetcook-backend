@@ -5,6 +5,7 @@ import (
 	"sweetcook-backend/services"
 	"sweetcook-backend/utils/error"
 	"strconv"
+	"sweetcook-backend/utils/logger"
 )
 
 type (
@@ -42,6 +43,11 @@ func (cb Cookbook)List(c *gin.Context)  {
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.DATA_NAME: cookbookList})
 }
 
+/**
+	添加菜谱到个人喜欢列表
+	http://localhost:7000/app-api/cookbook/add
+	{"ids":["1","10003"]}
+ */
 func (cb Cookbook)AddCookbookList(c *gin.Context)  {
 	//拿出session
 	sessionUsername := GetUserInfo(c)
@@ -49,5 +55,37 @@ func (cb Cookbook)AddCookbookList(c *gin.Context)  {
 		return
 	}
 	
+	cookIds := services.UserCookbook{}
+	if err := c.BindJSON(&cookIds);err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_PARAM_ERROR,error.MSG_NAME: "参数错误。"})
+		return
+	}
+	logger.Debug("ids is: ", cookIds)
 	
+	cookIds.Username = sessionUsername
+	retMsg, err := services.AddCookbookList(c, cookIds)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
+}
+
+/**
+	获取个人菜谱列表
+	http://localhost:7000/app-api/cookbook/user_cookbooks
+ */
+func (cb Cookbook)QueryUserCookbooks(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	userCookbooks, err := services.QueryUserCookbooks(c, sessionUsername)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.DATA_NAME: userCookbooks})
 }
