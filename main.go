@@ -56,6 +56,7 @@ func main() {
 		v1.GET("/cookbook/list", cookbook.List)
 		v1.POST("/cookbook/add", cookbook.AddCookbookList)
 		v1.GET("/cookbook/user_cookbooks", cookbook.QueryUserCookbooks)
+		v1.GET("/cookbook/companion_cookbooks", cookbook.QueryCompanionCookbooks)
 	}
 
 	r.Static("/public", "./public")

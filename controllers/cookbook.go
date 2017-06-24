@@ -89,3 +89,34 @@ func (cb Cookbook)QueryUserCookbooks(c *gin.Context)  {
 	}
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.DATA_NAME: userCookbooks})
 }
+
+/**
+	获取情侣菜谱列表
+	http://localhost:7000/app-api/cookbook/companion_cookbooks
+ */
+func (cb Cookbook)QueryCompanionCookbooks(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	//查询用户信息获取伴侣
+	sessionUser,err := services.QueryOne(c, sessionUsername)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_PARAM_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	
+	if sessionUser.Companion == "" {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_NO_DATA_ERROR,error.MSG_NAME: "您尚未绑定伴侣。"})
+		return
+	}
+	
+	userCookbooks, err := services.QueryUserCookbooks(c, sessionUser.Companion)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.DATA_NAME: userCookbooks})
+}
