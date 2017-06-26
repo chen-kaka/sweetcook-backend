@@ -58,6 +58,11 @@ func main() {
 		v1.GET("/cookbook/user_cookbooks", cookbook.QueryUserCookbooks)
 		v1.GET("/cookbook/companion_cookbooks", cookbook.QueryCompanionCookbooks)
 		v1.POST("/cookbook/delete", cookbook.DeleteCookbookList)
+		
+		acitivity := new(controllers.Activity)
+		v1.POST("/activity/create_update", acitivity.CreateOrUpdateActivity)
+		v1.GET("/activity/list", acitivity.ListActivity)
+		v1.GET("/activity/delete", acitivity.DeleteActivity)
 	}
 
 	r.Static("/public", "./public")
