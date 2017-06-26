@@ -131,3 +131,39 @@ func QueryUserCookbooks(c *gin.Context, username string) (juheCookbooks []JuheCo
 	err = db.C(CollectionJuheCookbook).Find(cookbookQuery).All(&juheCookbooks)
 	return
 }
+
+func DeleteCookbookList(c *gin.Context, cookIds UserCookbook) (retMsg string, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"username": cookIds.Username}
+	logger.Debug("query cookbook: ", query)
+	existedUserCookbook := UserCookbook{}
+	err = db.C(CollectionUserCookbook).Find(query).One(&existedUserCookbook)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	
+	newIds := []string{}
+	for _,eItem := range existedUserCookbook.Ids {
+		existed := false
+		for _, item := range cookIds.Ids {
+			if eItem == item {
+				existed = true
+				break
+			}
+		}
+		if !existed {
+			newIds = append(newIds, eItem)
+		}
+	}
+	existedUserCookbook.Ids = newIds
+	existedUserCookbook.UpdatedAt = time.Now().UnixNano() / int64(time.Millisecond)
+	
+	err = db.C(CollectionUserCookbook).Update(query, existedUserCookbook)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	retMsg = "delete succ"
+	return
+}

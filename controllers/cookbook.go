@@ -72,6 +72,34 @@ func (cb Cookbook)AddCookbookList(c *gin.Context)  {
 }
 
 /**
+	删除个人喜欢的菜谱
+	http://localhost:7000/app-api/cookbook/delete
+	{"ids":["1","10003"]}
+ */
+func (cb Cookbook)DeleteCookbookList(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	cookIds := services.UserCookbook{}
+	if err := c.BindJSON(&cookIds);err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_PARAM_ERROR,error.MSG_NAME: "参数错误。"})
+		return
+	}
+	logger.Debug("ids is: ", cookIds)
+	
+	cookIds.Username = sessionUsername
+	retMsg, err := services.DeleteCookbookList(c, cookIds)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
+}
+
+/**
 	获取个人菜谱列表
 	http://localhost:7000/app-api/cookbook/user_cookbooks
  */
