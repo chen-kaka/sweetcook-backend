@@ -20,6 +20,7 @@ type (
 		CookUser    string   `json:"cook_user" bson:"cook_user"`
 		Content    string   `json:"content" bson:"content"`
 		Comments    []Comment   `json:"comments" bson:"comments"`
+		Rating      float32  `json:"rating" bson:"rating"`
 		CreatedAt int64         `json:"created_at" bson:"created_at"`
 		UpdatedAt int64         `json:"updated_at" bson:"updated_at"`
 	}
@@ -87,5 +88,32 @@ func DeleteActivity(c *gin.Context, username string, id string) (retMsg string, 
 	logger.Debug("query info is: ", query)
 	err = db.C(CollectionActivity).Remove(query)
 	retMsg = "delete succ."
+	return
+}
+
+func AddActivityCommentRate(c *gin.Context, username string, id string, commentContent string, rating float32) (retMsg string, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"_id": bson.ObjectIdHex(id),"username":username}
+	
+	logger.Debug("query info is: ", query)
+	existedActivity := Activity{}
+	err = db.C(CollectionActivity).Find(query).One(&existedActivity)
+	if err != nil {
+		return
+	}
+	comment := Comment{}
+	comment.CreatedAt = time.Now().UnixNano() / int64(time.Millisecond)
+	comment.Comment = commentContent
+	comment.Username = username
+	comment.Id = bson.NewObjectId()
+	existedActivity.Comments = append(existedActivity.Comments, comment)
+	existedActivity.Rating = rating
+	err = db.C(CollectionActivity).Update(query, existedActivity)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	
+	retMsg = "add comment succ."
 	return
 }

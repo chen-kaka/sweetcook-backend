@@ -11,6 +11,12 @@ import (
 type (
 	Activity struct {
 	}
+	
+	ActivityComment struct {
+		ActId        string `json:"act_id" bson:"act_id" binding:"required"`
+		Rating    float32 `json:"rating" bson:"rating" binding:"required"`
+		Comment    string   `json:"comment" bson:"comment" binding:"required"`
+	}
 )
 
 /**
@@ -75,7 +81,7 @@ func (act Activity)ListActivity(c *gin.Context)  {
 /**
 	删除煮饭活动接口
 	
-	http://localhost:7000/app-api/activity/delete?id=sdfsdfsd
+	http://localhost:7000/app-api/activity/delete?id=5950e12bf141511234bb1ae1
  */
 func (act Activity)DeleteActivity(c *gin.Context)  {
 	//拿出session
@@ -93,6 +99,35 @@ func (act Activity)DeleteActivity(c *gin.Context)  {
 	logger.Debug("id is: ", id)
 	
 	retMsg, err := services.DeleteActivity(c, sessionUsername, id)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
+}
+
+/**
+	为煮饭活动评分接口
+	
+	http://localhost:7000/app-api/activity/comment_rate
+	{"act_id":"5950ff0cf14151165ac68069","rating":8.4,"comment":"好好吃呀！"}
+ */
+func (act Activity)CommentAndRateActivity(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	activityComment := ActivityComment{}
+	if err := c.BindJSON(&activityComment);err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_PARAM_ERROR,error.MSG_NAME: "参数错误。"})
+		return
+	}
+	
+	logger.Debug("activityComment is: ", activityComment)
+	
+	retMsg, err := services.AddActivityCommentRate(c, sessionUsername, activityComment.ActId, activityComment.Comment, activityComment.Rating)
 	if err != nil {
 		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
 		return

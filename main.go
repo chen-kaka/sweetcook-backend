@@ -63,6 +63,7 @@ func main() {
 		v1.POST("/activity/create_update", acitivity.CreateOrUpdateActivity)
 		v1.GET("/activity/list", acitivity.ListActivity)
 		v1.GET("/activity/delete", acitivity.DeleteActivity)
+		v1.POST("/activity/comment_rate", acitivity.CommentAndRateActivity)
 	}
 
 	r.Static("/public", "./public")
