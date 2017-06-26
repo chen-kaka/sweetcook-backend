@@ -64,6 +64,7 @@ func main() {
 		v1.GET("/activity/list", acitivity.ListActivity)
 		v1.GET("/activity/delete", acitivity.DeleteActivity)
 		v1.POST("/activity/comment_rate", acitivity.CommentAndRateActivity)
+		v1.GET("/activity/set_finished", acitivity.SetActivityFinished)
 	}
 
 	r.Static("/public", "./public")

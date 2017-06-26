@@ -21,6 +21,7 @@ type (
 		Content    string   `json:"content" bson:"content"`
 		Comments    []Comment   `json:"comments" bson:"comments"`
 		Rating      float32  `json:"rating" bson:"rating"`
+		Finished    int  `json:"finished" bson:"finished"`
 		CreatedAt int64         `json:"created_at" bson:"created_at"`
 		UpdatedAt int64         `json:"updated_at" bson:"updated_at"`
 	}
@@ -115,5 +116,26 @@ func AddActivityCommentRate(c *gin.Context, username string, id string, commentC
 	}
 	
 	retMsg = "add comment succ."
+	return
+}
+
+func SetActivityFinished(c *gin.Context, username string, id string) (retMsg string, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"_id": bson.ObjectIdHex(id),"username":username}
+	logger.Debug("query info is: ", query)
+	existedActivity := Activity{}
+	err = db.C(CollectionActivity).Find(query).One(&existedActivity)
+	if err != nil {
+		return
+	}
+	existedActivity.Finished = 1
+	
+	err = db.C(CollectionActivity).Update(query, existedActivity)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	
+	retMsg = "set finish succ."
 	return
 }

@@ -134,3 +134,24 @@ func (act Activity)CommentAndRateActivity(c *gin.Context)  {
 	}
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
 }
+
+/**
+	煮饭活动设置完成接口
+	
+	http://localhost:7000/app-api/activity/set_finished?act_id=5950ff0cf14151165ac68069
+ */
+func (act Activity)SetActivityFinished(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	actId := c.Query("act_id")
+	retMsg, err := services.SetActivityFinished(c, sessionUsername, actId)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
+}
