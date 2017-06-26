@@ -139,3 +139,11 @@ func SetActivityFinished(c *gin.Context, username string, id string) (retMsg str
 	retMsg = "set finish succ."
 	return
 }
+
+func SingleDogActivityInfo(c *gin.Context, id string) (existedActivity Activity, err error) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"_id": bson.ObjectIdHex(id)}
+	logger.Debug("query info is: ", query)
+	err = db.C(CollectionActivity).Find(query).One(&existedActivity)
+	return
+}

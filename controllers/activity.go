@@ -155,3 +155,26 @@ func (act Activity)SetActivityFinished(c *gin.Context)  {
 	}
 	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
 }
+
+/**
+	煮饭活动单身狗访问接口
+	
+	http://localhost:7000/app-api/activity/single_dog?act_id=5950ff0cf14151165ac68069
+ */
+func (act Activity)SingleDogActivityInfo(c *gin.Context)  {
+	//拿出session
+	sessionUsername := GetUserInfo(c)
+	if sessionUsername == "" {
+		return
+	}
+	
+	actId := c.Query("act_id")
+	retMsg, err := services.SingleDogActivityInfo(c, actId)
+	if err != nil {
+		c.JSON(200, gin.H{error.CODE_NAME: error.ERROR_SERVICE_ERROR,error.MSG_NAME: err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{error.CODE_NAME: error.SUCCESS,error.MSG_NAME: retMsg})
+}
+
+
