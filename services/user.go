@@ -17,6 +17,8 @@ type (
 	UserInfo struct {
 		Id        bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 		Username     string   `json:"username" bson:"username" binding:"required"`
+		Avatar  string   `json:"avatar" bson:"avatar"`
+		Desc  string   `json:"desc" bson:"desc"`
 		Nickname      string        `json:"nickname" bson:"nickname" binding:"required"`
 		Password      string        `json:"password" bson:"password" binding:"required"`
 		Telephone     string    `json:"telephone" bson:"telephone"`
